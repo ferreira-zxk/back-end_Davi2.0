@@ -169,12 +169,27 @@ function criar(req, res) {
     });
   }
 
-  const pedidoId = pedidosRepo.criar(req.usuario.id, total);
-  lidosItens.itens.forEach(item => pedidosRepo.adicionarItem(pedidoId, item));
-  lista.forEach(p => {
-    if (p.metodo === 'pix' && p.status === 'pendente') p.codigo_pix = pg.gerarCodigoPix(pedidoId);
-    pedidosRepo.adicionarPagamento(pedidoId, p);
-  });
+ 
+const pedidoId = pedidosRepo.criar(req.usuario.id, {
+  subtotal: total,
+  desconto: 0,
+  frete: 0,
+  total: total,
+  cupom: null
+});
+
+lidosItens.itens.forEach(item => {
+  pedidosRepo.adicionarItem(pedidoId, item);
+});
+
+lista.forEach(p => {
+  if (p.metodo === 'pix' && p.status === 'pendente') {
+    p.codigo_pix = pg.gerarCodigoPix(pedidoId);
+  }
+
+  pedidosRepo.adicionarPagamento(pedidoId, p);
+});
+
 
   const pedido = sincronizar(pedidoId);
   res.status(pedido.status === 'recusado' ? 402 : 201).json(apresentar(pedido));
