@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pulso Celulares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="topo-interno">
+      <a class="logo" href="/">Pulso</a>
+
+      <label class="busca">
+        <span class="so-leitor">Buscar celular</span>
+        <input type="search" id="busca" placeholder="Buscar por modelo ou marca" autocomplete="off">
+      </label>
+
+      <div class="conta">
+        <button type="button" id="botao-carrinho" class="botao-carrinho">
+          Carrinho <span id="contador-carrinho" class="contador" hidden>0</span>
+        </button>
+        <button type="button" id="botao-abrir-login" class="botao-escuro">Entrar</button>
+        <div id="area-usuario" class="usuario" hidden>
+          <span id="saudacao"></span>
+          <button type="button" id="botao-pedidos" class="botao-texto">Meus pedidos</button>
+          <button type="button" id="botao-sair" class="botao-texto">Sair</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="abertura">
+      <h1>Celulares novos, parcelados em até 10x sem juros</h1>
+      <p>Compare modelo, armazenamento e cor antes de escolher o seu.</p>
+    </section>
+
+    <section id="painel" class="painel" hidden>
+      <form id="formulario" novalidate>
+        <h2 id="titulo-form">Cadastrar celular</h2>
+
+        <div class="campo campo-largo">
+          <label for="nome">Modelo</label>
+          <input type="text" id="nome" placeholder="Ex.: Galaxy S24">
+        </div>
+        <div class="campo">
+          <label for="marca">Marca</label>
+          <input type="text" id="marca" placeholder="Ex.: Samsung">
+        </div>
+        <div class="campo">
+          <label for="armazenamento">Armazenamento</label>
+          <input type="text" id="armazenamento" placeholder="Ex.: 256 GB">
+        </div>
+        <div class="campo">
+          <label for="cor">Cor</label>
+          <input type="text" id="cor" placeholder="Ex.: Preto">
+        </div>
+        <div class="campo">
+          <label for="preco">Preço (R$)</label>
+          <input type="number" id="preco" placeholder="0,00" step="0.01" min="0">
+        </div>
+        <div class="campo campo-largo">
+          <label for="imagem">Endereço da foto (opcional)</label>
+          <input type="url" id="imagem" placeholder="https://...">
+        </div>
+
+        <div class="botoes campo-cheio">
+          <button type="submit" id="botao-salvar" class="botao-primario">Cadastrar celular</button>
+          <button type="button" id="botao-cancelar" class="botao-secundario" hidden>Cancelar edição</button>
+        </div>
+        <p id="mensagem" class="campo-cheio" role="status"></p>
+      </form>
+    </section>
+
+    <section class="vitrine-secao">
+      <div class="vitrine-topo">
+        <h2>Celulares</h2>
+        <span id="contagem" class="contagem"></span>
+      </div>
+      <div id="filtros" class="filtros" role="group" aria-label="Filtrar por marca" hidden></div>
+      <ul id="lista" class="vitrine"></ul>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <p>Pulso Celulares</p>
+  </footer>
+
+  <dialog id="dialogo-login">
+    <form id="form-login" class="form-login">
+      <h2 id="titulo-login">Entrar</h2>
+
+      <div class="campo" id="campo-login-nome" hidden>
+        <label for="login-nome">Nome</label>
+        <input type="text" id="login-nome" autocomplete="name">
+      </div>
+      <div class="campo">
+        <label for="login-email">E-mail</label>
+        <input type="email" id="login-email" autocomplete="email">
+      </div>
+      <div class="campo">
+        <label for="login-senha">Senha</label>
+        <input type="password" id="login-senha" autocomplete="current-password">
+      </div>
+
+      <p id="mensagem-login" role="status"></p>
+
+      <div class="botoes">
+        <button type="submit" id="botao-entrar" class="botao-primario">Entrar</button>
+        <button type="button" id="botao-alternar" class="botao-secundario">Criar conta</button>
+        <button type="button" id="botao-fechar-login" class="botao-texto">Fechar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dialogo-carrinho" class="gaveta">
+    <div class="gaveta-corpo">
+      <div class="dialogo-cab">
+        <h2>Carrinho</h2>
+        <button type="button" id="botao-fechar-carrinho" class="botao-texto">Fechar</button>
+      </div>
+      <ul id="carrinho-lista" class="carrinho-lista"></ul>
+      <div id="carrinho-rodape" class="carrinho-rodape">
+        <div class="linha-total"><span>Total</span><strong id="carrinho-total"></strong></div>
+        <p id="carrinho-parcela" class="tile-parcela"></p>
+        <button type="button" id="botao-finalizar" class="botao-primario botao-cheio">Finalizar compra</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="dialogo-checkout" class="janela">
+    <div class="janela-corpo">
+      <div class="dialogo-cab">
+        <h2 id="checkout-titulo">Finalizar compra</h2>
+        <button type="button" id="botao-fechar-checkout" class="botao-texto">Fechar</button>
+      </div>
+      <ol id="etapas" class="etapas" hidden>
+        <li data-etapa="dados">Seus dados</li>
+        <li data-etapa="pagamento">Pagamento</li>
+        <li data-etapa="resultado">Confirmação</li>
+      </ol>
+      <div id="checkout-corpo"></div>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+  <script src="carrinho.js"></script>
+</body>
+</html>
